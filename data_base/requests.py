@@ -1,5 +1,5 @@
 from data_base.base_models import async_session
-from data_base.base_models import User, Category, Item, Picture
+from data_base.base_models import User, Category, Item, Picture, Card
 from sqlalchemy import select
 
 
@@ -22,12 +22,7 @@ async def get_category_items(category_id):
         return await session.scalars(select(Item).where(Item.category == category_id))
 
 
-async def get_item(item_id):
-    async with async_session() as session:
-        return await session.scalar(select(Item).where(Item.id == item_id))
-
-
-async def in_basket(item_id):
+async def get_item(item_id) -> Item:
     async with async_session() as session:
         return await session.scalar(select(Item).where(Item.id == item_id))
 
@@ -37,3 +32,14 @@ async def get_picture(item_id):
         return await session.scalar(select(Picture).where(Picture.item_id == item_id))
 
 
+async def add_card(item_id: int, price: str, user_id: int):
+    async with async_session() as session:
+        session.add(Card(user_id=user_id, item_id=item_id, price_item=price))
+        await session.commit()
+
+
+async def del_card(card_id):
+    async with async_session() as session :
+        card = await session.scalar(select(Card).where(Card.card_id == card_id))
+        await session.delete(card)
+        await session.commit()

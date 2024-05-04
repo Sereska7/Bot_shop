@@ -31,6 +31,7 @@ async def catalog(message: Message, state: FSMContext):
 @router.callback_query(F.data.startswith('category_'))
 async def categories(callback: CallbackQuery, state: FSMContext):
     await state.update_data(id_category=int(callback.data.split('_')[1]))
+    await state.set_state(fs.ItemBack.id_item)
     await callback.message.delete()
     await callback.answer("Вы выбрали категорию")
     await callback.message.answer(text="<i>Выберите товар</i>", parse_mode="HTML",
@@ -38,7 +39,8 @@ async def categories(callback: CallbackQuery, state: FSMContext):
 
 
 @router.callback_query(F.data.startswith("item_"))
-async def item(callback: CallbackQuery):
+async def item(callback: CallbackQuery, state: FSMContext):
+    await state.update_data(id_item=int(callback.data.split('_')[1]))
     item_data = await rq.get_item(int(callback.data.split('_')[1]))
     await callback.message.delete()
     picture = await rq.get_picture(item_data.id)
@@ -73,20 +75,15 @@ async def ago_to_item(callback: CallbackQuery, state: FSMContext):
                                   reply_markup=await kb.items(data['id_category']))
 
 
-# @router.callback_query(F.data.startswith("to_basket"))
-# async def add_basket(callback: CallbackQuery, state: FSMContext):
-#     data = await state.get_data()
-#     all_in_basket = await rq.in_basket(data['id_item'])
-#     await callback.answer(f"{all_in_basket}")
-#     # await callback.message.answer(f"В корзине:\n{item.name}\n{item.price}")
+@router.callback_query(F.data.startswith("to_basket"))
+async def add_basket(callback: CallbackQuery, state: FSMContext):
+    data = await state.get_data()
+    item_data = await rq.get_item(int(data['id_item']))
+    await rq.add_card(
+        user_id=callback.from_user.id,
+        item_id=data["id_item"],
+        price=item_data.price
+    )
+    await callback.answer("Товар добавлен в корзину")
 
-
-
-# @router.message(F.text=="Корзина")
-# async def in_basket(message: Message):
-#     all_items_basket = await rq.in_basket()
-#     for item in all_items_basket:
-#         sp_item = {'name': item.name, "price": item.price}
-#
-#     await message.answer(f"")
 

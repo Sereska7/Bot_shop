@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 
 from sqlalchemy import (BigInteger, String, ForeignKey)
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, create_async_engine
 
 
@@ -47,14 +47,13 @@ class Picture(Base):
     item_id: Mapped[int] = mapped_column(ForeignKey('Items.id'))
 
 
-# class Card(Base):
-#     __tablename__ = "Cards"
-#
-#     card_id: Mapped[int] = mapped_column(primary_key=True)
-#     user_id: Mapped[int] = mapped_column(ForeignKey('Users.tg_id'))
-#     item_id: Mapped[int] = mapped_column(ForeignKey('Items.id'))
-#     price_item: Mapped[str] = mapped_column(ForeignKey('Items.price'))
+class Card(Base):
+    __tablename__ = "Cards"
 
+    card_id: Mapped[int] = mapped_column(primary_key=True)
+    user_id = mapped_column(BigInteger)
+    item_id: Mapped[int] = mapped_column()
+    price_item: Mapped[str] = mapped_column(String(30))
 
 
 async def async_main():
