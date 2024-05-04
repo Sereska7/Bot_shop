@@ -89,3 +89,7 @@ async def add_basket(callback: CallbackQuery, state: FSMContext):
 
 async def show_cards():
     pass
+
+
+async def show_cardsw():
+    pass
