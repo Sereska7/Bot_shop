@@ -87,3 +87,5 @@ async def add_basket(callback: CallbackQuery, state: FSMContext):
     await callback.answer("Товар добавлен в корзину")
 
 
+async def show_cards():
+    pass

@@ -5,7 +5,7 @@ from aiogram import Bot, Dispatcher
 from dotenv import load_dotenv
 
 from data_base.base_models import async_main
-from app.hundlers import router
+from app.handlers import router
 
 
 async def main():
