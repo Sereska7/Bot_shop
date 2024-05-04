@@ -38,6 +38,25 @@ class Item(Base):
     category: Mapped[int] = mapped_column(ForeignKey('Categories.id'))
 
 
+class Picture(Base):
+    __tablename__ = "Pictures"
+
+    id_picture: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(30))
+    rout_pic: Mapped[str] = mapped_column(String(100))
+    item_id: Mapped[int] = mapped_column(ForeignKey('Items.id'))
+
+
+# class Card(Base):
+#     __tablename__ = "Cards"
+#
+#     card_id: Mapped[int] = mapped_column(primary_key=True)
+#     user_id: Mapped[int] = mapped_column(ForeignKey('Users.tg_id'))
+#     item_id: Mapped[int] = mapped_column(ForeignKey('Items.id'))
+#     price_item: Mapped[str] = mapped_column(ForeignKey('Items.price'))
+
+
+
 async def async_main():
     async with engin.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)

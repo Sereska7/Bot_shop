@@ -3,4 +3,6 @@ from aiogram.fsm.context import FSMContext
 
 
 class ItemBack(StatesGroup):
-    id_item = State()
+    id_category = State()
+
+

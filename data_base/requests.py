@@ -1,5 +1,5 @@
 from data_base.base_models import async_session
-from data_base.base_models import User, Category, Item
+from data_base.base_models import User, Category, Item, Picture
 from sqlalchemy import select
 
 
@@ -25,3 +25,15 @@ async def get_category_items(category_id):
 async def get_item(item_id):
     async with async_session() as session:
         return await session.scalar(select(Item).where(Item.id == item_id))
+
+
+async def in_basket(item_id):
+    async with async_session() as session:
+        return await session.scalar(select(Item).where(Item.id == item_id))
+
+
+async def get_picture(item_id):
+    async with async_session() as session:
+        return await session.scalar(select(Picture).where(Picture.item_id == item_id))
+
+
