@@ -39,7 +39,12 @@ async def add_card(item_id: int, price: str, user_id: int):
 
 
 async def del_card(card_id):
-    async with async_session() as session :
+    async with async_session() as session:
         card = await session.scalar(select(Card).where(Card.card_id == card_id))
         await session.delete(card)
         await session.commit()
+
+
+async def get_card(user_id: int):
+    async with async_session() as session:
+        return await session.scalars(select(Card).where(Card.user_id == user_id))

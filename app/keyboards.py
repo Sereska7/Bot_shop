@@ -37,3 +37,9 @@ async def to_back():
     keyboard.add(InlineKeyboardButton(text="В корзину", callback_data="to_basket"))
     keyboard.add(InlineKeyboardButton(text="На главную", callback_data="back_main"))
     return keyboard.adjust(2).as_markup()
+
+
+async def button_del_card(card_id):
+    keyboard = InlineKeyboardBuilder()
+    keyboard.add(InlineKeyboardButton(text="Удалить", callback_data=f"del_card_{card_id}"))
+    return keyboard.adjust(2).as_markup()

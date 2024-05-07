@@ -87,9 +87,19 @@ async def add_basket(callback: CallbackQuery, state: FSMContext):
     await callback.answer("Товар добавлен в корзину")
 
 
-async def show_cards():
-    pass
+@router.message(F.text == "Корзина")
+async def get_carts_screen(message: Message):
+    all_cards = await rq.get_card(message.from_user.id)
+    await message.answer_photo(photo=FSInputFile(path="./Picture/cards.jpg"),
+                               caption="Корзина:")
+    for card in all_cards:
+        name_item = await rq.get_item(card.item_id)
+        await message.answer(text=f'{name_item.name}\n{card.price_item}',
+                             reply_markup=await kb.button_del_card(card.card_id))
 
 
-async def show_cardsw():
-    pass
+@router.callback_query(F.data.startswith("del_card_"))
+async def del_card(callback: CallbackQuery):
+    await rq.del_card(int(callback.data.split("_")[2]))
+    await callback.message.delete()
+    await callback.answer("Товар удален")
