@@ -103,3 +103,7 @@ async def del_card(callback: CallbackQuery):
     await rq.del_card(int(callback.data.split("_")[2]))
     await callback.message.delete()
     await callback.answer("Товар удален")
+
+
+async def delt4e():
+    pass
